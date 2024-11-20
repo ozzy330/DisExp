@@ -71,3 +71,22 @@ func QoiEncodeRun(data []byte, desc QOIDesc) ([]byte, int64) {
 	}
 	return chunks, int64(cLen)
 }
+
+func QoiEncodeIndex(data []byte, desc QOIDesc) ([]byte, int64) {
+	cData := C.CBytes(data)
+	defer C.free(cData)
+	cDesc := C.qoi_desc{
+		width:      C.uint(desc.width),
+		height:     C.uint(desc.height),
+		channels:   C.uchar(desc.channels),
+		colorspace: C.uchar(desc.colorspace),
+	}
+	var cLen C.int
+
+	cEncoded := C.qoi_encode_index(cData, &cDesc, &cLen)
+	chunks := C.GoBytes(cEncoded, cLen)
+	if cEncoded == nil {
+		return nil, -1
+	}
+	return chunks, int64(cLen)
+}

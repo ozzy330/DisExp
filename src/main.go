@@ -33,7 +33,7 @@ func percentage(a, b int64) float64 {
 func main() {
 
 	if len(os.Args) < 3 {
-		fmt.Println("Usage: go run main.go <INPUT.png> <OUTPUT_NAME>")
+		fmt.Println("Usage: go run main.go <INPUT.png> <OUTPUT>")
 		return
 	}
 
@@ -68,15 +68,21 @@ func main() {
 	// Encode to QOI
 	qoiBytes, qoiSize := QoiEncode(png_data, tDesc)
 	qoiWriteImage(os.Args[2]+".qoi", qoiBytes)
-	fmt.Printf("QOI, %d, %d, %f\n", sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
+	fmt.Printf("%s, QOI, %d, %d, %f\n", os.Args[2], sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
 
 	// Encode to QOI only with Full RGB & Run
 	qoiRunBytes, qoiSize := QoiEncodeRun(png_data, tDesc)
 	qoiWriteImage(os.Args[2]+".run.qoi", qoiRunBytes)
-	fmt.Printf("QOI Run, %d, %d, %f\n", sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
+	fmt.Printf("%s, QOI Run, %d, %d, %f\n", os.Args[2], sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
 
 	// Encode to QOI only with Full RGB & Diff/Luma
 	qoiDiffLumaBytes, qoiSize := QoiEncodeDiffLuma(png_data, tDesc)
 	qoiWriteImage(os.Args[2]+".diff.luma.qoi", qoiDiffLumaBytes)
-	fmt.Printf("QOI Diff/Luma, %d, %d, %f\n", sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
+	fmt.Printf("%s, QOI Diff/Luma, %d, %d, %f\n", os.Args[2], sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
+
+	// Encode to QOI only with Full RGB & Diff/Luma
+	qoiIndexBytes, qoiSize := QoiEncodeIndex(png_data, tDesc)
+	qoiWriteImage(os.Args[2]+".diff.luma.qoi", qoiIndexBytes)
+	fmt.Printf("%s, QOI Index, %d, %d, %f\n", os.Args[2], sizePNG.Size(), qoiSize, percentage(qoiSize, sizePNG.Size()))
+
 }

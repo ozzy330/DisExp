@@ -50,7 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 
-./result/720p/*
-./result/1080p/*
+result/
 dkms.conf
 .csv
