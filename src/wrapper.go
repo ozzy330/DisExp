@@ -18,7 +18,9 @@ type QOIDesc struct {
 	colorspace uint8
 }
 
-func QoiEncode(data []byte, desc QOIDesc) ([]byte, int64) {
+func QoiEncode(data []byte, desc QOIDesc) ([]byte, int64, string, string) {
+	id := "QOI"
+	ext := ".qoi"
 	cData := C.CBytes(data)
 	defer C.free(cData)
 	cDesc := C.qoi_desc{
@@ -31,11 +33,13 @@ func QoiEncode(data []byte, desc QOIDesc) ([]byte, int64) {
 	cEncoded := C.qoi_encode(cData, &cDesc, &cLen)
 	chunks := C.GoBytes(cEncoded, cLen)
 	if cEncoded == nil {
-		return nil, -1
+		return nil, -1, id, ext
 	}
-	return chunks, int64(cLen)
+	return chunks, int64(cLen), id, ext
 }
-func QoiEncodeDiffLuma(data []byte, desc QOIDesc) ([]byte, int64) {
+func QoiEncodeDiffLuma(data []byte, desc QOIDesc) ([]byte, int64, string, string) {
+	id := "Diff/Luma"
+	ext := ".diff.luma.qoi"
 	cData := C.CBytes(data)
 	defer C.free(cData)
 	cDesc := C.qoi_desc{
@@ -49,11 +53,13 @@ func QoiEncodeDiffLuma(data []byte, desc QOIDesc) ([]byte, int64) {
 	cEncoded := C.qoi_encode_diff_luma(cData, &cDesc, &cLen)
 	chunks := C.GoBytes(cEncoded, cLen)
 	if cEncoded == nil {
-		return nil, -1
+		return nil, -1, id, ext
 	}
-	return chunks, int64(cLen)
+	return chunks, int64(cLen), id, ext
 }
-func QoiEncodeRun(data []byte, desc QOIDesc) ([]byte, int64) {
+func QoiEncodeRun(data []byte, desc QOIDesc) ([]byte, int64, string, string) {
+	id := "Run"
+	ext := ".run.qoi"
 	cData := C.CBytes(data)
 	defer C.free(cData)
 	cDesc := C.qoi_desc{
@@ -67,12 +73,14 @@ func QoiEncodeRun(data []byte, desc QOIDesc) ([]byte, int64) {
 	cEncoded := C.qoi_encode_run(cData, &cDesc, &cLen)
 	chunks := C.GoBytes(cEncoded, cLen)
 	if cEncoded == nil {
-		return nil, -1
+		return nil, -1, id, ext
 	}
-	return chunks, int64(cLen)
+	return chunks, int64(cLen), id, ext
 }
 
-func QoiEncodeIndex(data []byte, desc QOIDesc) ([]byte, int64) {
+func QoiEncodeIndex(data []byte, desc QOIDesc) ([]byte, int64, string, string) {
+	id := "Index"
+	ext := ".index.qoi"
 	cData := C.CBytes(data)
 	defer C.free(cData)
 	cDesc := C.qoi_desc{
@@ -86,7 +94,7 @@ func QoiEncodeIndex(data []byte, desc QOIDesc) ([]byte, int64) {
 	cEncoded := C.qoi_encode_index(cData, &cDesc, &cLen)
 	chunks := C.GoBytes(cEncoded, cLen)
 	if cEncoded == nil {
-		return nil, -1
+		return nil, -1, id, ext
 	}
-	return chunks, int64(cLen)
+	return chunks, int64(cLen), id, ext
 }
